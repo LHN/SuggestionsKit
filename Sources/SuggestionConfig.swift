@@ -119,7 +119,7 @@ public struct SuggestionsConfig {
     /// If true will be haptic feedback after passing to next suggestions and after finishing
     let hapticEnabled: Bool
     
-    public init(buble: BubleConfig = BubleConfig(), text: TextConfig = TextConfig(), background: Background = Background(), animationsTimingFunction: CAMediaTimingFunctionName = .default, preferredTextAppearance: PreferredTextAppearance = .under, shouldBounceAfterMove: Bool = true, hapticEnabled: Bool = true) {
+    public init(buble: BubleConfig = BubleConfig(), text: TextConfig = TextConfig(), background: Background = Background(), animationsTimingFunction: CAMediaTimingFunctionName = .default, preferredTextAppearance: PreferredTextAppearance = .under, shouldBounceAfterMove: Bool = true, hapticEnabled: Bool = false) {
         self.buble = buble
         self.text = text
         self.background = background

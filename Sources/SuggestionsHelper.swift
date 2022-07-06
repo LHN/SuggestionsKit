@@ -54,13 +54,11 @@ public final class SuggestionsHelper {
             if mainView.tag == tag {
                 return mainView
             }
-            return nil
             
         case .byText(let text) where parameters.type is UILabel.Type:
             if let label = mainView as? UILabel, label.text == text {
                 return label
             }
-            return nil
             
         case .byText(let text) where parameters.type is UIButton.Type:
             if let button = mainView as? UIButton, button.titleLabel?.text == text {
@@ -71,7 +69,6 @@ public final class SuggestionsHelper {
             if mainView.accessibilityIdentifier == identifier {
                 return mainView
             }
-            return nil
             
         case .classNameContains(let className):
             if String(NSStringFromClass(mainView.classForCoder)).contains(className) {

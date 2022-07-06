@@ -103,9 +103,15 @@ class SuggestionsObject: NSObject {
         if let suggestion = suggestion {
             startObserve(suggestion: suggestion)
             updateWithSuggestion(suggestion: suggestion)
-            UIView.animate(withDuration: 1.0, animations: {
-                self.mainView?.alpha = 1.0
-            })
+            UIView.animate(
+                withDuration: 0.2,
+                delay: 0,
+                options: [.curveLinear],
+                animations: {
+                    self.mainView?.alpha = 1.0
+                },
+                completion: nil
+            )
         } else {
             if config.hapticEnabled {
                 if #available(iOS 10.0, *) {
