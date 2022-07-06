@@ -48,6 +48,9 @@ class SuggestionsObject: NSObject {
     
     private var holeRect: CGRect = .zero
     private var textLayerRect: CGRect = .zero
+    private var bubbleLayerRect: CGRect {
+        textLayerRect.inset(by: UIEdgeInsets(top: -10, left: -15, bottom: -20, right: -15))
+    }
     private var holeMoveDuration: TimeInterval = 0
     private var hashTable: NSHashTable<NSKeyValueObservation> = NSHashTable()
     
@@ -209,7 +212,7 @@ private extension SuggestionsObject {
         updateUnblur(suggestion: suggestion)
     }
     
-    @objc func viewTapped() {
+    @objc func viewTapped(_ sender: UIGestureRecognizer) {
         guard shouldTouchBeCounted else { return }
         if config.hapticEnabled {
             if #available(iOS 10.0, *) {
@@ -217,7 +220,16 @@ private extension SuggestionsObject {
                 generator.impactOccurred()
             }
         }
+        
+        let point = sender.location(in: view)
+        
         viewTappedBlock?()
+        
+        guard holeRect.contains(point) || bubbleLayerRect.contains(point) else {
+            return
+        }
+        
+        (lastSuggested?.view as? UIControl)?.sendActions(for: .touchUpInside)
     }
     
     func configureGestures() {
