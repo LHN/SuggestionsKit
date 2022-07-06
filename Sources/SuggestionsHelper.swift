@@ -26,8 +26,6 @@
 import Foundation
 import UIKit
 
-
-
 public final class SuggestionsHelper {
     
     public enum SearchType {
@@ -35,6 +33,7 @@ public final class SuggestionsHelper {
         case byTag(Int)
         case classNameContains(String)
         case hitable
+        case byaAcessibilityIdentifier(String)
     }
     
     public class SearchViewParameters: NSObject {
@@ -50,50 +49,42 @@ public final class SuggestionsHelper {
     public static func findViewRecursively(in view: UIView?, parameters: SearchViewParameters) -> UIView? {
         guard let mainView = view else { return nil }
         
-        switch parameters.type {
-            case is UILabel.Type:
-                if let label = mainView as? UILabel {
-                    switch parameters.search {
-                        case .byTag(let tag):
-                            return label.tag == tag ? label : nil
-                        case .byText(let text):
-                            if label.text == text {
-                                return label
-                            }
-                            break
-                        case .classNameContains(let className):
-                            if String(NSStringFromClass(label.classForCoder)).contains(className) {
-                                return label
-                            }
-                            break
-                        case .hitable:
-                            if label.hitTest(.zero, with: nil) == label {
-                                return label
-                            }
-                            break
-                    }
+        switch parameters.search {
+        case .byTag(let tag):
+            if mainView.tag == tag {
+                return mainView
             }
-            case is UIButton.Type:
-                if let button = mainView as? UIButton {
-                    switch parameters.search {
-                        case .byTag(let tag):
-                            return button.tag == tag ? button : nil
-                        case .byText(let text):
-                            return button.titleLabel?.text == text ? button : nil
-                        case .classNameContains(let className):
-                            if String(NSStringFromClass(button.classForCoder)).contains(className) {
-                                return button
-                            }
-                            break
-                        case .hitable:
-                            if button.hitTest(.zero, with: nil) == button {
-                                return button
-                            }
-                            break
-                    }
+            return nil
+            
+        case .byText(let text) where parameters.type is UILabel.Type:
+            if let label = mainView as? UILabel, label.text == text {
+                return label
             }
-            default:
-                break
+            return nil
+            
+        case .byText(let text) where parameters.type is UIButton.Type:
+            if let button = mainView as? UIButton, button.titleLabel?.text == text {
+                return button
+            }
+            
+        case .byaAcessibilityIdentifier(let identifier):
+            if mainView.accessibilityIdentifier == identifier {
+                return mainView
+            }
+            return nil
+            
+        case .classNameContains(let className):
+            if String(NSStringFromClass(mainView.classForCoder)).contains(className) {
+                return mainView
+            }
+            
+        case .hitable:
+            if mainView.hitTest(.zero, with: nil) == mainView {
+                return mainView
+            }
+            
+        default:
+            break
         }
         
         return mainView.subviews.compactMap { findViewRecursively(in: $0, parameters: parameters) }.first
@@ -124,6 +115,4 @@ public final class SuggestionsHelper {
                 return leftX < rightX
             })
     }
-    
-    
 }
