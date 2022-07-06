@@ -49,7 +49,7 @@ class SuggestionsObject: NSObject {
     private var holeRect: CGRect = .zero
     private var textLayerRect: CGRect = .zero
     private var bubbleLayerRect: CGRect {
-        textLayerRect.inset(by: UIEdgeInsets(top: -10, left: -15, bottom: -20, right: -15))
+        textLayerRect.inset(by: UIEdgeInsets(top: -13, left: -15, bottom: -23, right: -15))
     }
     private var holeMoveDuration: TimeInterval = 0
     private var hashTable: NSHashTable<NSKeyValueObservation> = NSHashTable()

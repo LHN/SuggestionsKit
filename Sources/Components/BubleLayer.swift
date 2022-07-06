@@ -51,7 +51,7 @@ private extension BubleLayer {
         let triangleHeight: CGFloat = config.buble.tailHeight
         let radius: CGFloat = config.buble.cornerRadius
         let frame = textRect
-        let rect = frame.inset(by: UIEdgeInsets(top: -5, left: -5, bottom: -5, right: -5))
+        let rect = frame.inset(by: UIEdgeInsets(top: -8, left: -5, bottom: -8, right: -5))
         let path = UIBezierPath()
         
         let sugFrame = holeRect
