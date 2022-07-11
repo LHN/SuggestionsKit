@@ -87,13 +87,13 @@ private extension SuggestionsManager {
         shared?.completionBlock = block
     }
     
-    func updateSuggestion() {
-		guard let sug = suggestions.filter({ $0.view != nil  || $0.frame != nil }).first else {
+    func updateSuggestion(withCompletion: Bool = true) {
+        guard let sug = suggestions.filter({ $0.view != nil  || $0.frame != nil }).first else {
             suggestionsOverlay?.updateForSuggestion(suggestion: nil)
             suggestionsOverlay?.suggestionsFinished()
             suggestionsOverlay = nil
             suggestions = []
-            completionBlock?()
+            if withCompletion { completionBlock?() }
             completionBlock = nil
             SuggestionsManager.shared = nil
             return
@@ -105,11 +105,17 @@ private extension SuggestionsManager {
         suggestionsOverlay = SuggestionsObject(config: config)
         
         suggestionsOverlay?.viewTappedBlock = { [weak self] in
-            guard let strongSelf = self else { return }
-            if !strongSelf.suggestions.isEmpty {
-                strongSelf.suggestions.removeFirst()
-                strongSelf.updateSuggestion()
-            }
+            self?.handleTap(withCompletion: false)
+        }
+        suggestionsOverlay?.suggestionTappedBlock = { [weak self] in
+            self?.handleTap()
+        }
+    }
+    
+    private func handleTap(withCompletion: Bool = true) {
+        if !suggestions.isEmpty {
+            suggestions.removeFirst()
+            updateSuggestion(withCompletion: withCompletion)
         }
     }
 }

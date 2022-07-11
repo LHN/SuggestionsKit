@@ -88,6 +88,7 @@ class SuggestionsObject: NSObject {
     }()
     
     var viewTappedBlock: (() -> ())?
+    var suggestionTappedBlock: (() -> ())? // include hole and text
     
     init(config: SuggestionsConfig) {
         self.config = config
@@ -229,13 +230,12 @@ private extension SuggestionsObject {
         
         let point = sender.location(in: view)
         
-        viewTappedBlock?()
-        
         guard holeRect.contains(point) || bubbleLayerRect.contains(point) else {
+            viewTappedBlock?()
             return
         }
         
-        (lastSuggested?.view as? UIControl)?.sendActions(for: .touchUpInside)
+        suggestionTappedBlock?()
     }
     
     func configureGestures() {

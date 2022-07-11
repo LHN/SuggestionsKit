@@ -64,10 +64,10 @@ class MainView: UIView {
     }
     
     func finish() {
-        UIView.animate(withDuration: 0.25, animations: {
+        UIView.animate(withDuration: 0.1, animations: {
             self.alpha = 0.0
         })
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             self.removeFromSuperview()
         }
     }
